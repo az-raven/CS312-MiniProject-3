@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>100% Legitimate Blog</title>
+	<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+	<header>
+		<a href="/">
+			<h1>CS316 Blog Website</h1>
+		</a>
+	</header>
+
+	<main>
+		<% if (editing_post !== false) { %>
+			<form action="/post/<%= editing_post %>/" method="post" class="block">
+				<h1 class="post-title">Editing Post #<%= editing_post + 1 %></h1>
+				<input type="text" name="title" id="post-creation-title" placeholder="Your Post Title" value="<%= posts[editing_post].title %>">
+				<div id="post-creation-details">
+					Written by
+					<input type="text" name="author" id="post-creation-author" placeholder="John Doe" value="<%= posts[editing_post].author %>">
+					on
+					<input type="datetime-local" name="created" id="post-creation-date" value="<%= posts[editing_post].created.toISOString().replace('Z','') %>">
+				</div>
+				<textarea name="content" id="post-creation-content" rows="15" spellcheck="true"><%= posts[editing_post].content%></textarea>
+				<input type="submit" value="Update Post" id="post-creation-submit">
+			</form>
+		<% } else { %>
+			<form action="/post/new" method="post" class="block">
+				<input type="text" name="title" id="post-creation-title" placeholder="Your Post Title">
+				<div id="post-creation-details">
+					Written by
+					<input type="text" name="author" id="post-creation-author" placeholder="John Doe">
+					on
+					<input type="datetime-local" name="created" id="post-creation-date">
+				</div>
+				<textarea type="" name="content" id="post-creation-content" rows="15" spellcheck="true"></textarea>
+				<input type="submit" value="Create Post" id="post-creation-submit">
+			</form>
+		<% } %>
+
+		<% for (let i = 0; i < posts.length; ++i) { %>
+			<article class="block">
+				<h2 class="post-title"><%= posts[i].title %></h2>
+				<span class="post-details">Written by <%= posts[i].author %> on <%= posts[i].created %></span>
+				<p class="post-content">
+					<%= posts[i].content %>
+				</p>
+				<form action="/post/<%= i %>/delete" method="post" class="action-container">
+					<a href="/editor/<%= i %>" class="inline-button">Edit</a>
+					<input type="submit" value="Delete" class="inline-button">
+				</form>
+			</article>	
+		<% } %>
+	</main>
+</body>
+</html>
